@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: chin_db
+    schema: chinook
+    tables:
+      - name: Album
+        description: Une table qui contient les informations concernant les albums
+        columns:
+          - name: AlbumId
+            description: Identifiant unique d'un album
+            tests:
+              - unique
+              - not_null
+      - name: Artist
+      - name: Customer
+      - name: Employee
+      - name: Genre
+      - name: Invoice
+      - name: InvoiceLine
+      - name: MediaType
+      - name: Playlist
+      - name: PlaylistTrack
+      - name: ReportsFromEmployee
+      - name: Track
