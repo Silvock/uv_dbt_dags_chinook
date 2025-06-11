@@ -1,14 +1,6 @@
 version: 2
 
 
-.sql
-stg_chin__invoice_lines.sql
-stg_chin__invoices.sql
-stg_chin__mediatypes.sql
-stg_chin__playists_tracks.sql
-stg_chin__playlists.sql
-stg_chin__reports_from_emp.sql
-stg_chin__tracks.sql
 
 models:
   - name: stg_chin__albums
@@ -150,20 +142,199 @@ models:
       - name: _nb_char_name
         description: "The number of characters of the genre"
 
-  - name: stg_sales_database__seller
-    description: "This model contains information about the sellers who provide the products."
+  - name: stg_chin__invoice_lines
+    description: "This model contains information about the invoices lines."
     columns:
-      - name: seller_id
-        description: "Primary key, unique identifier for each seller."
+      - name: InvoiceLineId
+        description: "Primary key, unique identifier for each invoice line."
         tests:
             - unique
             - not_null
+      - name: InvoiceId
+        description: "Foreign key linking the lines of the invoice with the invoice header"
+        tests:
+          - relationships:
+              name: invoiceid_foreign_key_in_stg_chin__invoices
+              to: ref('stg_chin__invoices')
+              field: InvoiceId
+      - name: TrackId
+        description: "Foreign key linking the lines of the invoice with the track header"
+        tests:
+          - relationships:
+              name: trackid_foreign_key_in_stg_chin__tracks
+              to: ref('stg_chin__tracks')
+              field: TrackId
+      - name: UnitPrice
+        description: "The unit price of the track"
+      - name: Quantity
+        description: "The quantity of tracks orderer"
+      - name: _invoice_line_total_amt
+        description: "the total of the line of the invoice"
 
-  - name: stg_sales_database__user
-    description: "This model contains user-related information, including where they live."
+  - name: stg_chin__invoices
+    description: "This model contains information about invoices"
     columns:
-      - name: user_id
-        description: "Primary key, unique identifier for each user."
+      - name: InvoiceId
+        description: "Primary key, unique identifier for each invoice."
         tests:
             - unique
             - not_null
+      - name: CustomerId
+        description: "Foreign key linking  the invoice with the customer"
+        tests:
+          - relationships:
+              name: customerid_foreign_key_in_stg_chin__customers
+              to: ref('stg_chin__customers')
+              field: CustomerId
+      - name: _converted_invoice_date
+        description: "date of the invoice"
+      - name: BillingAddress
+        description: "the billing address"
+      - name: BillingCity
+        description: "the billing city"
+      - name: BillingState
+        description: "the billing state"
+      - name: BillingCountry
+        description: "the billing country"
+      - name: BillingPostalCode
+        description: "the billing postal code"
+      - name: Total
+        description: "the total of the invoice"
+
+  - name: stg_chin__mediatypes
+    description: "This model contains information about invoices"
+    columns:
+      - name: MediaTypeId
+        description: "Primary key, unique identifier for each mediatype."
+        tests:
+            - unique
+            - not_null
+      - name: Name
+        description: "Name of the media"
+      - name: _cleaned_name
+        description: "name of the media with the first letter in upper case"
+      - name: _nb_char_name
+        description: "the number of characters of the mediatype"
+
+  - name: stg_chin__playists_tracks
+    description: "This model contains information about playists tracks"
+    columns:
+      - name: PlayistId
+        description: "Foreign key linking  the playtists  with the tracks"
+        tests:
+          - relationships:
+              name: playistid_foreign_key_in_stg_chin__playists
+              to: ref('stg_chin__playists')
+              field: PlayistsId
+      - name: TrackId
+        description: "Foreign key linking  the tracks with the playists"
+        tests:
+          - relationships:
+              name: trackid_foreign_key_in_stg_chin__tracks
+              to: ref('stg_chin__tracks')
+              field: TrackId
+      - name: _array_keys
+        description: "combinaison of playists and tracks keys"
+
+  - name: stg_chin__playlists
+    description: "This model contains information about playists"
+    columns:
+      - name: PlayistId
+        description: "Primary key, unique identifier for each playist."
+        tests:
+            - unique
+            - not_null
+      - name: Name
+        description: "Name of the playist"
+      - name: _cleaned_name
+        description: "name of the playist with the first letter in upper case"
+      - name: _nb_char_name
+        description: "the number of characters of the playist"
+
+  - name: stg_chin__reports_from_emp
+    description: "This model contains information about employees from the support"
+    columns:
+      - name: EmployeeId
+        description: "Primary key, unique identifier for each employee"
+        tests:
+            - unique
+            - not_null
+      - name: ReportsTo
+        description: "Foreign key linking the employees to their managers"
+        tests:
+          - relationships:
+              name: reports_to_foreign_key_in_stg_chin__report_from_emp
+              to: ref('stg_chin__report_from_emp')
+              field: EmployeeId
+      - name: LastName
+        description: "The last name of the manager"
+      - name: FirstName
+        description: "The first name of the manager"
+      - name: Title
+        description: "The title of the manager"
+      - name: _converted_birthdate
+        description: "The bithday date of the manager"
+      - name: _converted_hiredate
+        description: "The hiredate date of the manager"
+      - name: Address
+        description: "The address of the manager"
+      - name: City
+        description: "The city of the manager"
+      - name: State
+        description: "The state of the manager"
+      - name: Country
+        description: "The country of the manager"
+      - name: PostalCode
+        description: "The postal code of the manager"
+      - name: Phone
+        description: "The phone number of the manager"
+      - name: Fax
+        description: "The fax of the manager"
+      - name: Email
+        description: "The email of the manager"
+      - name: _manager_full_name
+        description: "The full name of the manager"
+
+  - name: stg_chin__tracks
+    description: "This model contains information about tracks"
+    columns:
+      - name: TrackId
+        description: "Primary key, unique identifier for each track."
+        tests:
+            - unique
+            - not_null
+      - name: Name
+        description: "Name of the track"
+      - name: _cleaned_track_name
+        description: "name of the track with the first letter in upper case"
+      - name: AlbumId
+        description: "Foreign key linking the tracks to their albums"
+        tests:
+          - relationships:
+              name: albumid_foreign_key_in_stg_chin__albums
+              to: ref('stg_chin__albums')
+              field: AlbumId
+      - name: MediaTypeId
+        description: "Foreign key linking the mediatype to their tracks"
+        tests:
+          - relationships:
+              name: mediatype_id_foreign_key_in_stg_chin__mediatypes
+              to: ref('stg_chin__mediatypes')
+              field: MediaTypeId
+      - name: GenreId
+        description: "Foreign key linking the genres to their tracks"
+        tests:
+          - relationships:
+              name: genreid_foreign_key_in_stg_chin__genres
+              to: ref('stg_chin__genres')
+              field: GenreId
+      - name: Composer
+        description: "list of composer in string"
+      - name: _cleaned_array_composer
+        description: "list of composer in array"
+      - name: Milliseconds
+        description: "the duration of the track in milliseconds"
+      - name: Bytes
+        description: "the size of the track in bytes"
+      - name: UnitPrice
+        description: "the unit price of the track"
