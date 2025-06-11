@@ -137,6 +137,11 @@ models:
             - not_null
       - name: Name
         description: "The label of the genre"
+        tests:
+          - accepted_values:
+              values: ['Rock', 'Science Fiction', 'Drama', 'Alternative & Punk','Pop','Metal','Latin','World',
+                'Soundtrack','Sci Fi & Fantasy','Blues','R&B/Soul','Rock And Roll','Electronica/Dance',
+'TV Shows','Jazz','Heavy Metal','Opera','Bossa Nova','Classical','Alternative','Reggae','Easy Listening','Hip Hop/Rap','Comedy']
       - name: _cleaned_name
         description: "The label of the genre with the first letter in upper case"
       - name: _nb_char_name
@@ -211,6 +216,9 @@ models:
             - not_null
       - name: Name
         description: "Name of the media"
+        tests:
+          - accepted_values:
+              values: ['Purchased AAC audio file', 'Protected MPEG-4 video file', 'Protected AAC audio file', 'AAC audio file','MPEG audio file']
       - name: _cleaned_name
         description: "name of the media with the first letter in upper case"
       - name: _nb_char_name
