@@ -12,3 +12,6 @@ wheels/
 #Secrets
 thibault-bigquery-training-fafebdbad219.json
 .thibault-bigquery-training-fafebdbad219.json
+
+# Vim temp files
+*.swp

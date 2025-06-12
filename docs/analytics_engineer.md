@@ -505,8 +505,48 @@ et une vue sera générée dans le dataset "dbt\_quad".
 
  
 
-## Dbt et les tests
+## La documentation et les tests dans DBT
 
+Après avoir vu comment modéliser les données avec dbt, ce nouveau chapitre aborde les étapes de documentation et de tests dans DBT. 
+
+En effet, dbt permet de documenter les modèles de données pour :
+- améliorer la lisibilité,
+- faciliter la collaboration,
+- garder une trace claire de chaque transformation et de sa logique métier.
+
+Ensuite, dbt inclut des fonctionnalités de test intégrées pour garantir la qualité et la fiabilité des données :
+- tests de non-nullité,
+- tests d’unicité,
+- tests de relations entre tables, etc.
+
+Enfin, il est possible de personnaliser le comportement de chaque modèle via des fichiers de configuration comme la gestion de la materialisation (table, vues, incremental), la priorisation des modèles et la gestion de rafraichissement.
+
+### La documentation dans DBT
+
+Documenter les données est essentiel pour améliorer la communication entre équipes et garantir l'indépendance de celles-ci. Cela facilite aussi la maintenabilité du code.
+dbt permet de documenter les modèles via des fichiers _schema.yml_. Ces fichiers contiennent des descriptions des modèles et de leurs colonnes clés, en particulier celles spécifiques aux besoins métiers.
+dbt génère automatiquement un site web avec la commande dbt docs generate pour faciliter la visualisation et diffusion de cette documentation.
+
+Une documentation bien faite répond aux questions récurrentes des équipes métiers, comme le calcul des KPIs, et évite des échanges répétitifs.
+Elle accélère également l’onboarding des nouvelles recrues dans une équipe data, car elles peuvent directement accéder aux informations nécessaires sur les modèles et données.
+
+La documentation générée peut être visualisée localement via la commande dbt docs serve, ou directement dans dbt Cloud sans avoir besoin de la générer manuellement.
+Un des éléments clés de cette documentation est le lineage, une vue en arborescence qui montre les dépendances entre modèles, facilitant la compréhension des relations entre eux.
+
+### Les tests dans DBT
+
+Le fait de tester les données permet de garantir leur qualité et d'éviter des erreurs courantes dans les dashboards d’entreprise (écarts de chiffres entre tableaux, erreurs de segmentation des données, etc.).
+En plus des tests basiques, des tests plus avancés comme la détection d'anomalies peuvent être réalisés pour intervenir avant que les données problématiques ne soient chargées en base.
+
+Les tests dans dbt sont des affirmations sur les données. Par exemple : "chaque commande doit avoir un montant supérieur à zéro" ou "chaque utilisateur doit avoir un user_id unique et non nul".
+Deux types de tests existent :
+
+- Tests singular : Des requêtes SQL personnalisées, stockées dans le dossier /test du projet.
+- Tests generic : Des tests standards (unicité, valeurs acceptées, non null, etc.) définis dans les fichiers YAML. Ces tests sont pré-codés dans dbt et ne nécessitent pas d'écrire de SQL.
+
+Les tests s’exécutent avec la commande `dbt test`. Il est possible de lancer tous les tests ou de se limiter à un modèle spécifique avec `dbt test --select nom_modèle`.
+Si un test échoue, dbt renvoie une liste des erreurs pour les analyser et les corriger.
+ 
 # Travailler en collaboration avec Git
 
 ## Rappel Git 
