@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: mrt_monthly_invoice_report
+    description: 'Monthly invoice report'
+    columns:
+      - name: _manager_full_name
+        description: "full name of the manager"
+      - name: Country
+        description: "Country where live the manager"
+      - name: total_invoices
+        description: "total invoices by manager"
+      - name: total_monthly_users
+        description: "total of users linked to the manager"
+      - name: total_monthly_users_from_France
+        description: "total users from france"
