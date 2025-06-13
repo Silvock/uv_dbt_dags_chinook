@@ -6,14 +6,14 @@ models:
   - name: stg_chin__albums
     description: "This model contains information about albums"
     columns:
-      - name: album_id
+      - name: AlbumId
         description: "Primary key, unique identifier for each album"
         tests:
             - unique
             - not_null
       - name: Title
         description: "information about titles of albums"
-      - name: artist_id
+      - name: ArtistId
         description: "Foreign key linking the album to the corresponding artist."
         tests:
           - relationships:
@@ -51,12 +51,12 @@ models:
         tests:
             - unique
             - not_null
-      - name: SupportRepId
+      - name: SupportRepid
         description: "Foreign key linking the order item to the corresponding order."
         tests:
           - relationships:
               name: supportrepid_foreign_key_in_stg_chin__employees
-              to: ref('stg_chin__reports_from_emp')
+              to: ref('stg_chin__employees')
               field: EmployeeId
       - name: FirstName
         description: "The firstname of the customer"
@@ -224,18 +224,18 @@ models:
       - name: _nb_char_name
         description: "the number of characters of the mediatype"
 
-  - name: stg_chin__playists_tracks
-    description: "This model contains information about playists tracks"
+  - name: stg_chin__playlists_tracks
+    description: "This model contains information about playlists tracks"
     columns:
-      - name: PlayistId
-        description: "Foreign key linking  the playtists  with the tracks"
+      - name: PlaylistId
+        description: "Foreign key linking  the playlists  with the tracks"
         tests:
           - relationships:
-              name: playistid_foreign_key_in_stg_chin__playists
-              to: ref('stg_chin__playists')
-              field: PlayistsId
+              name: playlistid_foreign_key_in_stg_chin__playlists
+              to: ref('stg_chin__playlists')
+              field: PlaylistId
       - name: TrackId
-        description: "Foreign key linking  the tracks with the playists"
+        description: "Foreign key linking  the tracks with the playlists"
         tests:
           - relationships:
               name: trackid_foreign_key_in_stg_chin__tracks
@@ -245,19 +245,19 @@ models:
         description: "combinaison of playists and tracks keys"
 
   - name: stg_chin__playlists
-    description: "This model contains information about playists"
+    description: "This model contains information about playlists"
     columns:
-      - name: PlayistId
-        description: "Primary key, unique identifier for each playist."
+      - name: PlaylistId
+        description: "Primary key, unique identifier for each playlist."
         tests:
             - unique
             - not_null
       - name: Name
-        description: "Name of the playist"
+        description: "Name of the playlist"
       - name: _cleaned_name
-        description: "name of the playist with the first letter in upper case"
+        description: "name of the playlist with the first letter in upper case"
       - name: _nb_char_name
-        description: "the number of characters of the playist"
+        description: "the number of characters of the playlist"
 
   - name: stg_chin__reports_from_emp
     description: "This model contains information about employees from the support"
@@ -269,11 +269,6 @@ models:
             - not_null
       - name: ReportsTo
         description: "Foreign key linking the employees to their managers"
-        tests:
-          - relationships:
-              name: reports_to_foreign_key_in_stg_chin__report_from_emp
-              to: ref('stg_chin__report_from_emp')
-              field: EmployeeId
       - name: LastName
         description: "The last name of the manager"
       - name: FirstName
