@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: int_chin__tracks
+    description: '{{ doc("int_chin__users_invs") }}'
+    columns:
+      - name: _cleaned_track_name
+        description: "Primary key, unique identifier for each invoice."
+      - name: Bytes
+        description: "the size of the track in bytes"
+      - name: UnitPrice
+        description: "the unit price of the track"
+      - name: _cleaned_array_composer
+        description: "list of composer in array"
+      - name: Milliseconds
+        description: "the duration of the track in milliseconds"
+      - name: _genre_name
+        description: "name of the media with the first letter in upper case"
+      - name: _alb_title
+        description: "Name of the album with the first letter in upper case"
+      - name: _mediatype
+        description: "name of the media with the first letter in upper case"
+      - name: _is_top_10_track
+        description: check is the track is in top ten of sales

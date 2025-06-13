@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: int_chin__customers
+    description: '{{ doc("int_chin__users_invs") }}'
+    columns:
+      - name: TrackId
+        description: "Primary key, unique identifier for each track."
+        tests:
+          - unique
+          - not_null
+      - name: dominant_customer_state
+        description: "The state with the highest number of purchase"
+      - name: distinct_customer_count
+        description: "The number of customer by tracks"
