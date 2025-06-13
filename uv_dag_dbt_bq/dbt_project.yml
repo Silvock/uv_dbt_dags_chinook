@@ -32,9 +32,9 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   uv_dag_dbt_bq:
     # add docs directly in tqble in big query
-      +persist_docs:
-        relation: true
-        columns: true
+    +persist_docs:
+      relation: true
+      columns: true
     # Config indicated by + and applies to all files under models/example/
     mart:
       +materialized: table

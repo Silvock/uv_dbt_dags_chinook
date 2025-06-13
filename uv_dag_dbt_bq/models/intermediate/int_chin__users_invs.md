@@ -1,4 +1,4 @@
-{% docs int_chin_user_invs %}
+{% docs int_chin__users_invs %}
 
 This model provides a summary of user activity and invoices, focusing on their order history and purchasing behavior. It aggregates key metrics, such as:
 
