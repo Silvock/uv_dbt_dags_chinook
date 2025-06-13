@@ -657,6 +657,76 @@ Deux types de tests existent :
 
 Les tests s’exécutent avec la commande `dbt test`. Il est possible de lancer tous les tests ou de se limiter à un modèle spécifique avec `dbt test --select nom_modèle`.
 Si un test échoue, dbt renvoie une liste des erreurs pour les analyser et les corriger.
+
+#### Les tests génériques
+
+Les tests génériques sont à intégrer dans le fichier yaml contenant la documentation. Dans staging\_mod\_docs.yml, 
+
+```
+version: 2
+
+
+
+models:
+  - name: stg_chin__albums
+    description: "This model contains information about albums"
+    columns:
+      - name: AlbumId
+        description: "Primary key, unique identifier for each album"
+        tests:
+            - unique
+            - not_null
+      - name: Title
+        description: "information about titles of albums"
+      - name: ArtistId
+        description: "Foreign key linking the album to the corresponding artist."
+        tests:
+          - relationships:
+              name: artist_id_foreign_key_in_stg_chin_album
+              to: ref('stg_chin__artists')
+              field: ArtistId
+      - name: _cleaned_title
+        description: "Name of the album with the first letter in upper case"
+      - name: _nb_char_in_title
+        description: "Count the number of character in the album title"
+```
+
+on trouve l'implémentation d'un test d'unicité et d'un test non-null sur la colonne de clé primaire AlbumId. Sur la colonne de clé secondaire ArtistId, on trouve un test de relation qui va tester l'intégrité référentielle de notre relation. Enfin, dans le modèle stg\_chin\_\_genre, sur la colonne "Name", on trouve le dernier type de test générique qui vérifie si les valeurs de notre colonne sont bien contenue dans la liste spécifié par le test. 
+
+```
+  - name: stg_chin__genre
+    description: "This model contains details of products available for sale, primarily focusing on information about the product's volume and size."
+    columns:
+      - name: GenreId
+        description: "Primary key, unique identifier for each genre of music."
+        tests:
+            - unique
+            - not_null
+      - name: Name
+        description: "The label of the genre"
+        tests:
+          - accepted_values:
+              values: ['Rock', 'Science Fiction', 'Drama', 'Alternative & Punk','Pop','Metal','Latin','World',
+                'Soundtrack','Sci Fi & Fantasy','Blues','R&B/Soul','Rock And Roll','Electronica/Dance',
+'TV Shows','Jazz','Heavy Metal','Opera','Bossa Nova','Classical','Alternative','Reggae','Easy Listening','Hip Hop/Rap','Comedy']
+      - name: _cleaned_name
+        description: "The label of the genre with the first letter in upper case"
+      - name: _nb_char_name
+        description: "The number of characters of the genre"
+```
+
+#### Les tests singuliers
+
+Les tests singulier sont implémentés dans le dossier "tests" de notre projet dbt. 
+
+Par exemple, le test quantity\_positive.sql lance une requête sql sur le modèle stg\_chin\_\_invoice\_lines pour véfifier si les valeurs de la colonne "Quantity" ne sont pas négatives. Le test en lui-même repose sur une requête sql qui cherche des valeurs négatives. S'il en trouve une, le test échoue. 
+
+```
+select
+    InvoiceLineId,
+from  {{ ref('stg_chin__invoice_lines.sql') }}
+where Quantity < 0
+```
  
 # Travailler en collaboration avec Git
 
