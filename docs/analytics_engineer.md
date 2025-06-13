@@ -533,12 +533,123 @@ Elle accélère également l’onboarding des nouvelles recrues dans une équipe
 La documentation générée peut être visualisée localement via la commande dbt docs serve, ou directement dans dbt Cloud sans avoir besoin de la générer manuellement.
 Un des éléments clés de cette documentation est le lineage, une vue en arborescence qui montre les dépendances entre modèles, facilitant la compréhension des relations entre eux.
 
+Il y a deux façons d'écrire de la documentation, la première est de rédiger un fichier.yml pour tous les modèles. Par exemple, dans staging\_mod\_docs.yml, 
+
+```
+version: 2
+
+
+
+models:
+  - name: stg_chin__albums
+    description: "This model contains information about albums"
+    columns:
+      - name: AlbumId
+        description: "Primary key, unique identifier for each album"
+        tests:
+            - unique
+            - not_null
+      - name: Title
+        description: "information about titles of albums"
+      - name: ArtistId
+        description: "Foreign key linking the album to the corresponding artist."
+        tests:
+          - relationships:
+              name: artist_id_foreign_key_in_stg_chin_album
+              to: ref('stg_chin__artists')
+              field: ArtistId
+      - name: _cleaned_title
+        description: "Name of the album with the first letter in upper case"
+      - name: _nb_char_in_title
+        description: "Count the number of character in the album title"
+
+
+  - name: stg_chin__artists
+    description: "This model contains information about artists"
+    columns:
+      - name: ArtistID
+        description: "Primary key, unique identifier for each artist."
+        tests:
+            - unique
+            - not_null
+      - name: Name
+        description: "information about the name of the artists"
+      - name: _cleaned_name
+        description: "Make sure the name of the artist start with an upper case"
+      - name: _nb_char_name
+        description: "Count the number of character in the name of the artist"
+      - name: _snd_name
+        description: "Convert the name of the artist in sound characters"
+```
+
+on a la description de deux modèles dans le même fichier. Ce fichier .yml se structure de la manière suivante : 
+
+```
+  - name: nom_du_modele
+    description: description du modèle
+    columns: --> Les colonnes du modèle
+        - name: nom_de_la_colonne
+          description: description de la colonne 
+```
+
+Une autre manière d'écrire de la documentation est d'écrire des blocs de code markdown qui seront ensuite référencés dans le fichier .yml. 
+Ces blocs markdown sont plus personnalisables (caratère en gras, italique, ... puces etc...) que la propriété "description" des fichiers yaml. 
+
+Par exemple, dans le dossier des modèles "intermediate" le fichier int\_chin\_\_users\_invs.md :
+
+```
+{% docs int_chin__users_invs %}
+
+This model provides a summary of user activity and invoices, focusing on their order history and purchasing behavior. It aggregates key metrics, such as:
+
+    Total Amount Spent: The total amount spent by the user.
+    Total Tracks: The total quantity of tracks purchased by the user.
+    Total Distinct Tracks: The count of distinct tracks purchased by the user.
+    Total Orders: The total number of orders placed by the user.
+    Dominant State : The state where most tracks are purchased
+    Number of employee to manage : The number of employee by managers.
+    Average unit price : The average of unit price of tracks sold.
+    Total Distinct Customers : The count of distinct customer by tracks.
+    Total Support Solicitations : The number of times support is asked.
+    In top ten : True/False field to see if the track is in top ten of sales.
+
+{% enddocs %}
+```
+
+Un ou plusieurs blocs markdown peuvent être écrits pour être référencé dans un fichier .yml comme int\_chin\_\_employees.yml
+
+```
+version: 2
+
+models:
+  - name: int_chin__employees
+    description: '{{ doc("int_chin__users_invs") }}'
+    columns:
+      - name: CustomerId
+        description: "Primary key, unique identifier for each track."
+        tests:
+          - unique
+          - not_null
+      - name: _cust_full_name
+        description: "The full name of the customer"
+      - name: Country
+        description: "The country of the manager"
+      - name: total_support_solicitations
+        description: "the total of solicitations of the support"
+      - name: _manager_full_name
+        description: "The full name of the manager"
+      - name: nb_employees_to_manage
+        description: "The number of employees manage by the manager"
+```
+
+Au niveau de la propriété "description" du modèle, on trouve une référence à notre bloc markdown. Cette référence peut être réutilisée dans plusieurs fichiers YAML.  
+
 ### Les tests dans DBT
 
 Le fait de tester les données permet de garantir leur qualité et d'éviter des erreurs courantes dans les dashboards d’entreprise (écarts de chiffres entre tableaux, erreurs de segmentation des données, etc.).
 En plus des tests basiques, des tests plus avancés comme la détection d'anomalies peuvent être réalisés pour intervenir avant que les données problématiques ne soient chargées en base.
 
-Les tests dans dbt sont des affirmations sur les données. Par exemple : "chaque commande doit avoir un montant supérieur à zéro" ou "chaque utilisateur doit avoir un user_id unique et non nul".
+Les tests dans dbt sont des affirmations sur les données. Par exemple : "chaque commande doit avoir un montant supérieur à zéro" ou "chaque utilisateur doit avoir un user\_id unique et non nul".
 Deux types de tests existent :
 
 - Tests singular : Des requêtes SQL personnalisées, stockées dans le dossier /test du projet.
