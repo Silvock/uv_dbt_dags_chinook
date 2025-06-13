@@ -1,0 +1,28 @@
+
+version: 2
+
+models:
+  - name: int_chin__invoices
+    description: '{{ doc("int_chin__users_invs") }}'
+    columns:
+      - name: InvoiceId
+        description: "Primary key, unique identifier for each invoice."
+        tests:
+          - unique
+          - not_null
+      - name: TrackId
+        description: "The full name of the customer"
+      - name: CustomerId
+        description: "Foreign key linking  the invoice with the customer"
+      - name: _converted_invoice_date
+        description: "date of the invoice"
+      - name: BillingCountry
+        description: "the billing country"
+      - name: total_amt_sold
+        description: "the amount of tracks sold"
+      - name: total_dist_track_sold
+        description: "the number of track sold"
+      - name: total_qty_of_tracks_sold
+        description: "the quantity of tracks sold"
+      - name: avg_unit_price_sold
+        description: "the average price of track sold"
