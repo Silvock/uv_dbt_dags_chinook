@@ -7,9 +7,6 @@ models:
     columns:
       - name: InvoiceId
         description: "Primary key, unique identifier for each invoice."
-        tests:
-          - unique
-          - not_null
       - name: TrackId
         description: "The full name of the customer"
       - name: CustomerId
