@@ -844,16 +844,49 @@ Dans un dépôt local :
 Sur github : 
 13. Création et validation de la pull request et fusion de la branche ajout-goodbye à main
 
-
-
-
 ## Mettre son code en production
 
 ### Les pull requests : Bonnes pratiques
 
+Une Pull Request (PR) regroupe les modifications apportées et propose leur intégration sur la branche principale. 
+Elles doivent être créées sur le dépôt distant à la suite de la commande *git push branche-de-travail* lancée depuis le dépôt local. 
+
+Elle doit être accompagnée d’une description claire pour expliquer les changements. En entreprise, les exigences pour valider une PR peuvent varier : familiarisez-vous avec les conventions dès votre arrivée.
+
+Concernant les branches, utilisez des lettres minuscules, des tirets pour séparer les mots, et, si possible, le numéro de ticket associé (ex. : de123-feature-update).
+Dans les commit, précisez l’action avec des verbes et ajoutez un préfixe pour clarifier l’intention (ex. : fix pour corriger un bug, feat pour une nouvelle fonctionnalité, docs pour documenter).
+Enfin, comme pour les branches et commits, le titre de la PR doit être explicite, et la description doit inclure les détails nécessaires pour une review efficace. Il est utile d’inclure le lien vers le ticket Jira ou Notion associé.
+
+### Paramétrer son dépôt distant au code review 
+
+Sur Github dans notre dépot distant : 
+
+1. Se rendre dans l'onglet "Settings"
+2. Se rendre dans les options "Branches"
+3. Cliquer sur "Add classic branch protection rule"
+4. Désigner la branche sur laquelle on souhaite appliquer les règles, en l'occurence "main"
+5. Cocher les règles suivantes : 
+    - Require a pull request before merging : Empèche la modification de la branche main directement
+        - Require approval : Nécessite une approbation d'un tiers
+        - Require review from code owners
+    - Require conversation resolution before merging
+    - Lock branch
+5. Cliquer sur "Create"
+
 ## Mettre en place une CI/CD
 
 ### Définition
+
+Le CI/CD (Continuous Integration/Continuous Deployment) est un ensemble de workflows automatisés déclenchés lors de la création ou la mise à jour d’une pull request. La CI vérifie la qualité du code (format, compilation), tandis que la CD déploie le code validé sur des environnements intermédiaires comme staging ou dev avant la production.
+
+Au cours de sa mission l'analytics engineer peut rencontrer ces erreurs : 
+
+- Code SQL mal formaté : les entreprises utilisent souvent des linters comme SQLFluff. Si le format est incorrect, un échec sera signalé.
+- Code dbt non compilable : le code dbt peut parfois ne pas compiler correctement ; la CI/CD détectera cette erreur.
+- Échec de tests dbt : si des tests dbt sont intégrés dans le CI/CD, tout test échoué sera signalé.
+- Gestion incorrecte des dépendances : un renommage de colonne peut provoquer des erreurs dans les modèles dbt dépendants. Le CI/CD alerte alors sur ces ruptures de dépendance.
+
+La CI/CD prévient les erreurs en production grâce à des vérifications automatisées et permet une collaboration fluide en intégrant ces checks dans les workflows de développement. Son objectif est de garantir que le code livré soit stable et conforme aux standards de qualité de l’entreprise.
 
 ### Github actions
 
