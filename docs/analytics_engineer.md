@@ -730,23 +730,122 @@ where Quantity < 0
  
 # Travailler en collaboration avec Git
 
+En entreprise, l'utilisation de Git comme système de gestion de versions est essentielle pour faciliter la collaboration entre les membres d'une équipe de développement. Git permet à plusieurs développeurs de travailler simultanément sur un projet sans risquer de perdre ou d'écraser le travail des autres.
+
+Une des pratiques clés associées à Git est le "peer review" ou revue de code par les pairs. Cette approche collaborative consiste à soumettre les modifications de code sous forme de "pull requests", permettant ainsi aux autres membres de réviser, commenter et suggérer des améliorations avant l'intégration du code dans la branche principale. 
+Ce processus favorise non seulemment la qualité du code, mais aussi le partage des connaissances et de bonnes pratiques au sein de l'équipe. 
+
+De plus, Git offre des fonctionnalités comme les "branch" et le "merge", qui aident à gérer les différents versions du projet et à intégrer les contributions de manières organisée et contrôlée.
+Ainsi, Git devient un outil indispensable pour maintenir un flux de travail efficace et collaboratif dans un environnement professionnel.
+
+
 ## Rappel Git 
 
-Une certification Git Kraken est disponible 
+Git est un outil puissant pour le contrôle de version, et maîtriser ses commandes essentielles est crucial pour une utilisation efficace. Parmi les commandes les plus importantes, *git clone* permet de copier un dépôt distant sur votre machine local, vous permettant de commencer à travailler sur un projet. 
 
-### Git pull
+*git add* esst utilisé pour ajouter des modifications ajoutées dans l'index (=staging) préparant ainsi les fichiers pour un commit. 
 
-### Git add, commit et push
+Avec *git commit*, vous pouvez enregistrer les modifications ajoutées dans l'index avec un message décrivant les changements effectués. 
+
+*git pull* et *git push* sont essentiels pour la synchronisation avec un dépôt distant : *git pull* récupère les modifications du dépôt distant et les fusionne avec votre copie locale, tandis que *git push* envoie vos commit locaux vers le dépôt distant.
+
+*git branch* est utilisé pour lister, créer ou supprimer des branches, ce qui est fondamental pour travailler sur différentes fonctionnalités ou corrections de bugs de manière isolée.
+
+Enfin, *git merge* permet de fusionner les modifications d'une branche dans une autre, facilitant ainsi l'intégration des fonctionnalités développées séparément. Ces commandes forment la base pour une utilisation efficace de Git dans un environnement de travail collaboratif. 
+
+Une formation certifiante  Git Kraken est disponible pour valider les commandes essentielles ci-dessus. 
 
 ## Apporter ces modifications à la branche principale
 
+Par convention, on travaille pas directement sur la branche "master" ou "main" d'un projet.
+*git checkout -b nom-branch* permet de créer et naviguer entre les branches d'un projet. Une fois les modifications ajoutées, enregistrées dans l'index et envoyées sur le dépôt distant, il faudra terminer par fusionner la branche de travail et la branche priincipale. 
+
 ### Workflow Git
+
+1. Je mets à jour ma branche master/main
+
+*git checkout master*
+
+*git pull*
+
+2. Je crée une branche 
+
+*git checkout –b ma-branche-avec-une-nouveaute*
+
+3. Je fais mes modifications sur les fichiers du projet, j’ajoute mes modifications au dossier staging et je les sauvegarde avec un commit 
+
+*git add .* 
+
+*git commit –m «mon message de commit »*
+
+4. J’envoie mes modifications sur le serveur Github/Gitlab
+
+*git push origin ma-branch-avec-une-nouveaute*
+
+5. Sur Github ou GitLab je crée une pull request : La PR déclenchera la CI/CD, qui doit être validée sans échec avant de passer à la prochaine étape. 
+
+6. Je demande une review à un collaborateur une fois la CI/CD passée. Si des changements sont demandés, les appliquer avant de finaliser.
+
+7. Une fois validée, Je fusionne la PR avec la branche de production. 
 
 ### Git merge with main
 
+La commande *git merge master* intègre les changements récents de master dans votre branche actuelle. Elle génère un commit de fusion pour rassembler les modifications.
+
 ### Git rebase
 
+La commande *git rebase master* applique vos commits après ceux de master, produisant un historique linéaire et ordonné des commits. Cela simplifie la lecture de l’historique, mais peut créer des conflits qu’il faut résoudre avant de finaliser le rebase.
+
 ### Gérer les conflits git
+
+Lors de merges ou de rebase, des conflits peuvent apparaître si des modifications ont été apportées aux mêmes fichiers sur différentes branches. Pour les résoudre, vous pouvez choisir quelle version garder ou fusionner les modifications pour conserver les deux versions.
+
+Les conflits peuvent être gérés directement dans un IDE comme VSCode ou dans l’interface GitHub, et ils doivent être résolus avant de finaliser la fusion.
+
+A. Cas pratique : Gérer un conflit lors d'un git merge
+
+Dans un dépôt local : 
+1. Création d'une branche ajout-bonjour *git checkout -b ajout-bonjour*.
+2. Création d'un fichier "conflict.txt" contenant sur la première ligne "Bonjour et bienvenue dans ce cas pratique".
+3. *git add .*, *git commit "mon nouveau fichier bonjour"*, *git push*
+
+Sur Github : 
+4. Création et validation de la pull request et fusion de la branche ajout-bonjour à main
+
+Dans le dépôt local : 
+5. Création d'une branche add-hello *git checkout -b add-hello*.
+6. Création d'un fichier "conflict.txt" contenant sur la première ligne "Hello and welcome to this pratice case".
+7. *git add .*, *git commit "my new file hello"*, *git push*
+
+Sur Github : 
+10. Résolution du conflit avec l'interface Github en cliquant sur "Resolve conflit" et une fois qu'on a terminé "Commit merge" 
+
+Dans le dépôt local : 
+11. *git checkout main*
+12. *git pull*
+
+
+B. Cas pratique : Gérer un conflit lors d'un git rebase
+
+Dans un dépôt local : 
+1. Création d'une branche ajout-bonjour *git checkout -b ajout-aurevoir*.
+2. Création d'un fichier "conflict2.txt" contenant sur la première ligne "Merci d'avoir suivi ce cas pratique, au revoir".
+3. *git add .*, *git commit "mon nouveau fichier au revoir"*, *git push*
+4. Création et validation de la pull request et fusion de la branche ajout-aurevoir à main
+5. Création d'une branche add-goodbye *git checkout -b add-goodbye*.
+6. Création d'un fichier "conflict2.txt" contenant sur la première ligne "Thanks for following this practice case, bye".
+7. *git add .*, *git commit "my new file goodbye"*, *git push*
+8. Récupération des modifications récemment fusionnées sur main sur la branche "add-goodbye" *git fetch origin*
+9. Application des modifications de "main" sur la branche "add-goodbye" avec *git rebase origin/main*
+10. Résolution du conflit avec un éditeur de texte.
+11. Ajout des modifications à l'index *git add conflict2.txt*
+12. *git rebase continue* et *git push origin add-goobye --force*
+
+Sur github : 
+13. Création et validation de la pull request et fusion de la branche ajout-goodbye à main
+
+
+
 
 ## Mettre son code en production
 
