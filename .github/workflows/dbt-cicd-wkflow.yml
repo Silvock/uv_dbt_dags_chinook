@@ -1,0 +1,38 @@
+name: CICD DBT
+# https://github.com/marketplace/actions/dbt-action
+# https://docs.github.com/en/actions/writing-workflows/quickstart
+run-name: ${{ github.actor }} is opening a pull request 🚀
+
+# Run jobs when a pull request is created
+on: [pull_request]
+
+jobs:
+  action:
+    # Create an Ubuntu container
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      # Clone the repos
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      # Run dbt 
+      - name: dbt-run
+        uses: mwhitaker/dbt-action@master
+        with:
+          # Get latest dependancies
+          dbt_command: "dbt deps"
+          # Run dbt on the latest changes with our profile
+          dbt_command: "dbt run — select +state:modified+ — defer — state manifest_file_folder — fail-fast --profiles-dir ."
+          dbt_project_folder: "uv_dag_dbt_bq"
+        env:
+          # BigQuery credentials in secrets of our github project
+          DBT_BIGQUERY_TOKEN: ${{ secrets.DBT_BIGQUERY_TOKEN }}
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
