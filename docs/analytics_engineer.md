@@ -944,9 +944,8 @@ jobs:
         uses: mwhitaker/dbt-action@master
         with:
           # Get latest dependancies
-          dbt_command: "dbt deps"
           # Run dbt on the latest changes with our profile
-          dbt_command: "dbt run — select +state:modified+ — defer — state manifest_file_folder — fail-fast --profiles-dir ."
+          dbt_command: "dbt deps && dbt run — select +state:modified+ — defer — state manifest_file_folder — fail-fast --profiles-dir ."
           dbt_project_folder: "uv_dag_dbt_bq"
         env:
           # BigQuery credentials in secrets of our github project
