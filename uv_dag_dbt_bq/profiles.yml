@@ -4,7 +4,7 @@ uv_dag_dbt_bq:
       dataset: dbt_quad
       job_execution_timeout_seconds: 300
       job_retries: 1
-      keyfile: /home/quadsilv/projects/uv_dag_dbt_bq/.thibault-bigquery-training-fafebdbad219.json
+      keyfile: ../.thibault-bigquery-training-fafebdbad219.json
       location: US
       method: service-account
       priority: interactive
