@@ -920,7 +920,7 @@ Pour contrôler et tester notre code on écrira ce workflow :
 name: CICD DBT
 # https://github.com/marketplace/actions/dbt-action
 # https://docs.github.com/en/actions/writing-workflows/quickstart
-run-name: ${{ github.actor }} is opening a pull request 🚀
+run-name: ${{ github.actor }} is opening a pull request 
 
 # Run jobs when a pull request is created
 on: [pull_request]
@@ -931,14 +931,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - run: echo " The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo " This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo " The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       # Clone the repos
       - name: Checkout repository
         uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - run: echo " The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo " The workflow is now ready to test your code on the runner."
       # Run dbt 
       - name: dbt-run
         uses: mwhitaker/dbt-action@master
@@ -954,7 +954,7 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - run: echo " This job's status is ${{ job.status }}."
 ```
 
 # Conclusion
