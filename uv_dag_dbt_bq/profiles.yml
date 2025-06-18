@@ -1,0 +1,14 @@
+uv_dag_dbt_bq:
+  outputs:
+    dev:
+      dataset: dbt_quad
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      keyfile: ../.thibault-bigquery-training-fafebdbad219.json
+      location: US
+      method: service-account
+      priority: interactive
+      project: thibault-bigquery-training
+      threads: 2
+      type: bigquery
+  target: dev

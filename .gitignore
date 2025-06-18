@@ -10,8 +10,8 @@ wheels/
 .venv
 
 #Secrets
-thibault-bigquery-training-fafebdbad219.json
 .thibault-bigquery-training-fafebdbad219.json
+.user.yml
 
 # Vim temp files
 *.swp

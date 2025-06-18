@@ -890,4 +890,77 @@ La CI/CD prévient les erreurs en production grâce à des vérifications automa
 
 ### Github actions
 
-### Gitlab CI/CD
+GitHub Actions est un outil d'intégration continue et de livraison continue (CI/CD) qui permet d'automatiser les workflows directement dans vos dépôts GitHub. Avec GitHub Actions, vous pouvez créer des workflows personnalisés pour construire, tester et déployer votre code chaque fois qu'un événement spécifique se produit, comme un push ou une pull request. Cela aide à s'assurer que votre code est toujours testé et déployé de manière cohérente et fiable.
+
+Pour mettre en place GitHub Actions dans un projet, commencez par créer un répertoire nommé `.github/workflows` à la racine de votre dépôt. Dans ce répertoire, créez un fichier YAML pour définir votre workflow. Par exemple, vous pouvez créer un fichier nommé `my_workflow.yml`. Dans ce fichier, vous définissez les événements qui déclenchent le workflow, comme `push` ou `pull_request`, et spécifiez les jobs à exécuter. Chaque job est composé de plusieurs étapes (steps) qui peuvent inclure des actions préexistantes disponibles sur le GitHub Marketplace ou des scripts personnalisés.
+
+Voici un exemple simple de fichier YAML pour un workflow qui exécute des tests à chaque push :
+
+```
+name: CI
+
+on: [push]
+
+jobs:
+  jobname:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Run tests
+      run: npm test
+```
+
+Dans cet exemple, le workflow est déclenché à chaque push vers le dépôt. Il utilise un container avec la dernière version d'Ubuntu, effectue un checkout du code, exécute une commande simple pour afficher "Hello, world!", et enfin, exécute les tests avec npm. Une fois votre fichier YAML créé et poussé vers votre dépôt, GitHub Actions exécutera automatiquement le workflow selon les événements spécifiés.
+
+Pour contrôler et tester notre code on écrira ce workflow : 
+
+```
+name: CICD DBT
+# https://github.com/marketplace/actions/dbt-action
+# https://docs.github.com/en/actions/writing-workflows/quickstart
+run-name: ${{ github.actor }} is opening a pull request 🚀
+
+# Run jobs when a pull request is created
+on: [pull_request]
+
+jobs:
+  action:
+    # Create an Ubuntu container
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      # Clone the repos
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      # Run dbt 
+      - name: dbt-run
+        uses: mwhitaker/dbt-action@master
+        with:
+          # Get latest dependancies
+          dbt_command: "dbt deps"
+          # Run dbt on the latest changes with our profile
+          dbt_command: "dbt run — select +state:modified+ — defer — state manifest_file_folder — fail-fast --profiles-dir ."
+          dbt_project_folder: "uv_dag_dbt_bq"
+        env:
+          # BigQuery credentials in secrets of our github project
+          DBT_BIGQUERY_TOKEN: ${{ secrets.DBT_BIGQUERY_TOKEN }}
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+```
+
+# Conclusion
+
+En conclusion, cette formation d'Analytics Engineer nous a permis d'acquérir des compétences essentielles pour transformer des données brutes en informations exploitables grâce à des outils puissants tels que dbt, BigQuery et Git.
+
+Nous avons appris à structurer et à modéliser des données de manière efficace avec dbt, à exploiter la puissance de BigQuery pour effectuer des analyses à grande échelle, et à collaborer de manière optimale grâce à Git. 
+
+Ces compétences nous positionnent favorablement pour relever les défis du monde de la data et contribuer de manière significative à la prise de décision stratégique au sein des organisations. Nous sommes désormais équipés pour concevoir des pipelines de données robustes, assurer leur maintenance et favoriser une culture de la donnée au sein des équipes.
