@@ -956,6 +956,28 @@ jobs:
       - run: echo " This job's status is ${{ job.status }}."
 ```
 
+# Orchestrer la génération des models dbt
+
+Dagster est un outil d'orchestration, au même titre qu'airflow. A la différence d'airflow, Dagster est mieux intégrer à dbt dans le sens où il propose la notion d'abstraction d'actif. Un actif dans Dagster est un objet dans un stockage persistant. Dans notre cas ce sont nos tables présente dans dbt mais un actif peut être un fichier ou un modèle de machine learning. 
+
+Pour définir un actif, on écrit du code python qui va définir et décrire notre actif. Le fait de définir notre actif permet d'avoir une approche déclarative de la gestion de données puisque tout est écrit dans une fonction. 
+
+La matérialisation est le fait d'executer la fonction python pour sauvegarder son résultat dans un stockage persistant, en l'occurrence BigQuery. 
+
+Pour mettre en place un projet dagster qui enveloppe notre projet dbt il faut lancer la commande suivante : 
+
+`uv run dagster-dbt project scaffold --project-name chinook_dagster --dbt-project-dir uv_dag_dbt_bq`
+
+Avec cette commande on va créer un projet dagster chinook\_dagster qui enveloppera notre projet dbt uv\_dag\_dbt\_bq. 
+
+Il faudra ensuite se rendre dans le dossier chinook\_dagster et lancer la commande : 
+
+`uv dagster dev` 
+
+Si cette commande retourne une erreur, il faudra installer le package python dagster-webserver via la commmande `uv add dagster-webserver`. 
+
+Dagster va venir définir nos tables et vues précedemment créer avec dbt en actifs. Ainsi pour lancer la génération de nos models dbt, on pourra cliquer sur l'icone materialise all depuis l'inteface graphique de dagster. 
+
 # Conclusion
 
 En conclusion, cette formation d'Analytics Engineer nous a permis d'acquérir des compétences essentielles pour transformer des données brutes en informations exploitables grâce à des outils puissants tels que dbt, BigQuery et Git.
