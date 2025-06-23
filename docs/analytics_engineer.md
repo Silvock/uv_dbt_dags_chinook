@@ -976,7 +976,37 @@ Il faudra ensuite se rendre dans le dossier chinook\_dagster et lancer la comman
 
 Si cette commande retourne une erreur, il faudra installer le package python dagster-webserver via la commmande `uv add dagster-webserver`. 
 
-Dagster va venir définir nos tables et vues précedemment créer avec dbt en actifs. Ainsi pour lancer la génération de nos models dbt, on pourra cliquer sur l'icone materialise all depuis l'inteface graphique de dagster. 
+La commande `uv dagester dev` va générer tous les fichiers dont a besoin dagster pour fonctionner. Elle crééra également une interface graphique qui nous permettra d'intérargir avec dagster et notre projet dbt.
+
+Dagster va venir définir nos tables et vues précedemment créer avec dbt en actifs. 
+
+Pour materialiser tous nos models dbt, il suffira de cliquer sur l'icone `materialise all` (=`dbt run`) depuis l'inteface graphique de dagster.
+
+Il sera bien sûr possible de materialiser nos models individuellement et de planifier des materialisations. 
+
+La planification des materialisation se paramêtre dans le fichier *schedule.py* :
+
+```
+
+from dagster_dbt import build_schedule_from_dbt_selection
+
+from .assets import uv_dag_dbt_bq_dbt_assets
+
+schedules = [
+     build_schedule_from_dbt_selection(
+         [uv_dag_dbt_bq_dbt_assets],
+         job_name="materialize_dbt_models",
+         cron_schedule="0 0 * * *",
+         dbt_select="fqn:*",
+     ),
+]
+```
+
+Ici, le paramètre *cron_schedule* stipule un chargement quotidien de tous les models dbt. 
+
+Pour finir, Dagster est un outil d'orchestration très bien intégrer à DBT. En effet, contrairement à airflow qui ne permet que de lancer `dbt run` à intervalles réguliers, Dagster permet de lancer des materialisation individuelles via les tags et empiète également sur les tâche de dbt puisqu'il permet de créer des model dbt avec python. 
+
+
 
 # Conclusion
 
