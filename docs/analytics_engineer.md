@@ -27,12 +27,13 @@ Une formation SQL est disponible dans l'espace formation Quadratic.
 
 ### Afficher ses données
 
-Les mots clés de base pour afficher les données sont `SELECT` et `FROM`. À la suite de `SELECT` on listera les colonnes que l'on souhaite afficher et à la suite de `FROM`
+Les mots clés de base pour afficher les données sont `SELECT` et `FROM`. À la suite de `SELECT` on listera les colonnes que l'on souhaite afficher et à la suite de `FROM` on déclarera la table à requêter.
 
 ```
 SELECT
 colonne1, colonne2
-FROM table1 ```
+FROM table1
+```
 
 ### Filtrer
 
@@ -44,7 +45,8 @@ colonne1, colonne2
 FROM table1
 WHERE 
 colonne1 > 50
-AND colonne2 LIKE 'quad%' ```
+AND colonne2 LIKE 'quad%'
+ ```
 
 ### Ordonner
 
@@ -57,7 +59,8 @@ FROM table1
 WHERE 
 colonne1 > 50
 AND colonne2 LIKE 'quad%'
-ORDER BY colonne1 DESC ```
+ORDER BY colonne1 DESC
+ ```
 
 ### Agréger
 
@@ -72,20 +75,32 @@ colonne1 > 50
 AND colonne2 LIKE 'quad%'
 GROUP BY 
 colonne2
-ORDER BY colonne1 DESC ```
+ORDER BY colonne1 DESC
+ ```
 
 ## Créer un schéma CREATE TABLE
 
-Nommer clairement : utiliser des noms descriptifs et cohérents pour les tables et les colonnes.
-Définir des types de données appropriés : choisir le type de données le plus adapté pour chaque colonne (par exemple, INT pour les numéros, DATE pour les dates).
-Utiliser des clés primaires : chaque table doit avoir une clé primaire pour identifier de manière unique chaque ligne.
-Utiliser des clés étrangères pour les relations : définir des relations entre les tables via des clés étrangères pour maintenir l'intégrité référentielle.
-Prévoir des contraintes pour garantir la qualité des données : comme les contraintes d'unicité, de vérification, etc.
-SQL - Le data definition language (DDL).
+Avec SQL, il faut déclarer un schéma avec la commande `CREATE TABLE`. Un schéma est une définition de table dans lequel on viendra insérer des données avec la commande `INSERT INTO`.
+
+Lors de la création d'une table, il faut prendre en compte ces bonnes pratiques :
+
+- Nommer clairement : utiliser des noms descriptifs et cohérents pour les tables et les colonnes.
+- Définir des types de données appropriés : choisir le type de données le plus adapté pour chaque colonne (par exemple, INT pour les numéros, DATE pour les dates).
+- Utiliser des clés primaires : chaque table doit avoir une clé primaire pour identifier de manière unique chaque ligne.
+- Utiliser des clés étrangères pour les relations : définir des relations entre les tables via des clés étrangères pour maintenir l'intégrité référentielle.
+- Prévoir des contraintes pour garantir la qualité des données : comme les contraintes d'unicité, de vérification, etc.
 
 ```
 CREATE TABLE utilisateur (
-id INT PRIMARY KEY NOT NULL,     nom VARCHAR(100),     prenom VARCHAR(100),     email VARCHAR(255),     date_naissance DATE,     pays VARCHAR(255),     ville VARCHAR(255),     code_postal VARCHAR(5),     nombre_achat INT )
+id INT PRIMARY KEY NOT NULL,
+nom VARCHAR(100),
+prenom VARCHAR(100),
+email VARCHAR(255),
+date_naissance DATE,
+pays VARCHAR(255),
+ville VARCHAR(255),
+code_postal VARCHAR(5),
+nombre_achat INT )
 ```
 
 ## Altérer ses données INSERT, UPDATE, DELETE
@@ -103,13 +118,15 @@ INSERT INTO table VALUES ('valeur 1', 'valeur 2', ...)
 ```
 UPDATE table
 SET nom_colonne_1 = 'nouvelle valeur'
-WHERE condition ```
+WHERE condition
+ ```
 
 - `DELETE` permet de supprimer des enregistrements à une table.
 
 ```
 DELETE FROM `table`
-WHERE condition ```
+WHERE condition
+ ```
 
 ## Les Jointures
 
@@ -124,7 +141,8 @@ SELECT
 t1.colonne1, t2.colonne3, t1.colonne2
 FROM table1 t1
 INNER JOIN table2 t2
-ON t1.primarykeycol = t2.secondarykeycol ```
+ON t1.primarykeycol = t2.secondarykeycol
+ ```
 
 - LEFT JOIN permet d'afficher toutes les lignes de la table de gauche, qu'elles aient ou non une correspondance avec la table de droite.
 
@@ -133,7 +151,8 @@ SELECT
 t1.colonne1, t2.colonne3, t1.colonne2
 FROM table1 t1
 INNER JOIN table2 t2
-ON t1.primarykeycol = t2.secondarykeycol ```
+ON t1.primarykeycol = t2.secondarykeycol
+ ```
 
 ### RIGHT JOIN et FULL JOIN
 
@@ -174,7 +193,7 @@ Un cloud provider est une entreprise qui fournit des ressources de calcul évolu
 - Microsoft
 
 |   Cloud Prodvider   |   Data lake |   Data warehouse |
-
+|---------------------|-------------|------------------|
 |   Google   |   Google Cloud Storage    |   BigQuery |
 |   Amazon   |   Amazon S3  |   Redshift |
 |   Microsoft   |   OneLake   |   Azure SQL server |
@@ -211,7 +230,7 @@ Il est conçu pour stocker des données structurées provenant de diverses sourc
 ### Tableau comparatif
 
 |   Caractéristiques   |   Data lake |   Data warehouse |
-
+|--------------------|--------------|-------------------|
 |   Type de données   |   Structurées, semi-structurées, non structurées   |   Principalement structurées |
 |   Organisation   |   Données brutes et non organisées  |   Données organisées et préstructurées |
 |   Stockage   |   Stockage à faible cout pour grandes quantités   |   Stockage plus coûteux en raison de l'optimisation |
@@ -264,25 +283,26 @@ SELECT
 categories, zone, COUNT(products)
 
 FROM table 
-GROUP BY 1,2 ```
+GROUP BY 1,2
+ ```
 
 Dans cet exemple, on arrive facilement à identifier les colonnes qui agrègent nos données. Cependant, pour rendre le code plus lisible, on nommera les colonnes d'agrégation dans notre clause `GROUP BY`.
 
 ### Utiliser un maximum les linters
 
-Bouton "Format" dans Bigquery
+- Bouton "Format" dans Bigquery
 
 Dans la console google cloud, il faut se rendre sur la page Bigquery. En cliquant sur "Saisir une nouvelle requête", l'éditeur de requête s'ouvre. Après avoir saisi sa requête, il faut cliquer sur le bouton "Plus" puis "Formatter la requête". 
 
-Azure SQL
+- Azure SQL
 
 Dans SQL Server Management Studio, il est possible d'installer un plug-in gratuit pour formater ces requêtes. Il est disponible à cette [adresse](http://architectshack.com/PoorMansTSqlFormatter.ashx#Download_5).
 
-Redshift
+- Redshift
 
 Il n'existe pas de client SQL développé par Amazon pour leurs bases de données Amazon Redshift. Le plus simple est d'utiliser un client SQL générique comme SQL Workbench ou DBeaver qui ont une option de formatage des requêtes préinstallée. 
 
-SQLFlluff en local
+- SQLFlluff en local
 
 SQLFluff est un linter open source, multi dialectes et configurable. C'est un package python qui s'installe via `pip install sqlfluff`
 La documentation se trouve à cette [adresse](https://sqlfluff.com/).
@@ -332,7 +352,8 @@ Dans le terminal Ubuntu, on crée notre dossier de travail avec `uv init nom_du_
 1. `uv add dagster-dbt dbt-bigquery` : On installe dagster avec dbt et son adapteur pour BigQuery.
 2. `uv run dbt init` : On crée notre dossier de travail dbt avec ces sous-dossiers.
 
-a. On donne un nom à notre projet dbt b. On sélectionne l'adaptateur que l'on va utiliser. En l'occurrence ici, on utilisera l'adaptateur BigQuery. 
+a. On donne un nom à notre projet dbt
+b. On sélectionne l'adaptateur que l'on va utiliser. En l'occurrence ici, on utilisera l'adaptateur BigQuery. 
 c. On sélectionne une méthode de connexion à bigquery. Je vous conseille la méthode service account qui demandera le chemin vers le fichier clé du service account. Pour obtenir se fichier, il faudra : 
 
 - Se rendre à ce [lien](https://console.cloud.google.com/iam-admin/serviceaccounts?hl=fr&inv=1&invt=Abwq_w&project=thibault-bigquery-training)
@@ -351,7 +372,9 @@ f. On sélectionne la même zone géographique US ou EU pour dbt, notre projet b
 Pour utiliser dbtCloud, la version Saas avec une interface web de DBT, il faudra créer un compte d'essai gratuit. 
 La configuration d'un projet dbtcloud passe par les étapes ci-dessous : 
 
-1. Se connecter à une plateforme a. Cliquer sur "add new connection" b. Choisir la plateforme Bigquery
+1. Se connecter à une plateforme
+a. Cliquer sur "add new connection"
+b. Choisir la plateforme Bigquery
 c. Charger la clé JSON du compte de service que l'on a créée précédemment pour dbt core (étape 2c)
 d. Terminer en cliquant sur save. 
 
@@ -373,18 +396,18 @@ Un projet dbt est constitué d'un ensemble de dossiers :
 - analysis : Ce dossier contiendra des requêtes SQL d'analyse supplémentaires.
 - macros : Ce dossier contiendra des fichiers YAML de création de macros jinja. Ce code pourra être utilisé dans les models.
 
-Le fichier dbt_project.yml est le fichier principal de configuration du projet dbt. Il contient des informations qui détermine comment dbt fonctionne dans notre projet.
+Le fichier dbt\_project.yml est le fichier principal de configuration du projet dbt. Il contient des informations qui détermine comment dbt fonctionne dans notre projet.
 Par exemple des informations sur la matérialisation de nos models en vue ou en table, sur les tests à appliquer...
 
 Un model est un fichier SQL contenant une requête amélioré avec du code jinja. Ce code jinja est simple à utiliser et est identifiable par les deux accolades qui l'entourent. 
-Pour générer la table issue du model "my_first_model.sql" on utilisera la commande `dbt run --select:my_first_model` (il ne faut pas oublier de mettre `uv` avant si vous utiliser dbtcore).
-À la fin de cette opération, on trouvera dans notre dataset BigQuery une nouvelle table portant le nom "my_first_model".
+Pour générer la table issue du model "my\_first\_model.sql" on utilisera la commande `dbt run --select:my_first_model` (il ne faut pas oublier de mettre `uv` avant si vous utiliser dbtcore).
+À la fin de cette opération, on trouvera dans notre dataset BigQuery une nouvelle table portant le nom "my\_first\_model".
 
 Avant de créer son premier modèle, on va créer nos tables sources et les identifier dans un fichier source.yml.
 
 - Création des tables dans bigquery
 
-Vous trouverez le fichier Chinook_BigQuery.sql qui va créer les tables chinook et insérer données à l'intérieur.Il suffira de copier le script et de l'exécuter dans BigQuery studio. Un nouvel ensemble de données (=dataset) sera créé contenant les tables Album, Artist, etc. 
+Vous trouverez le fichier Chinook\_BigQuery.sql qui va créer les tables chinook et insérer données à l'intérieur.Il suffira de copier le script et de l'exécuter dans BigQuery studio. Un nouvel ensemble de données (=dataset) sera créé contenant les tables Album, Artist, etc. 
 Ces tables sont décrites dans la formation quadratic SQL. 
 
 - Création du fichier source.yml dans le dossier "model" pour identifier nos sources. 
@@ -399,13 +422,20 @@ Dans l'exemple ci-dessous, notre dataset source "chinook" sera référencé par 
 version: 2
 
 sources:
-- name: chini\_db     schema: chinook     tables:
-- name: Album         description: Une table qui contient les informations concernant les albums         columns:
-- name: AlbumId             description: Identifiant unique d'un album             tests:
-- unique
-- not\_null
-- name: Artist
-- name: Customer ```
+- name: chini_db    
+  schema: chinook     
+  tables:
+  - name: Album        
+  description: Une table qui contient les informations concernant les albums
+   columns:
+   - name: AlbumId             
+   description: Identifiant unique d'un album             
+   tests:
+     - unique
+     - not_null
+   - name: Artist
+   - name: Customer
+ ```
 
 - Notre premier modèle
 
@@ -429,7 +459,8 @@ ArtistId,
 INITCAP(Title) AS _cleaned_title,
 CHAR_LENGTH(Title) AS _nb_char_in_title
 FROM
-{{source('chin_db','Album')}} ```
+{{source('chin_db','Album')}}
+ ```
 
 sera compilé par dbt ...
 
@@ -441,7 +472,8 @@ ArtistId,
 INITCAP(Title) AS _cleaned_title,
 CHAR_LENGTH(Title) AS _nb_char_in_title
 FROM
-`bq_project_name`.`chinook`.`Album` ```
+`bq_project_name`.`chinook`.`Album`
+ ```
 
 et une vue sera générée dans le dataset "dbt\_quad".
 
@@ -450,11 +482,13 @@ et une vue sera générée dans le dataset "dbt\_quad".
 Après avoir vu comment modéliser les données avec dbt, ce nouveau chapitre aborde les étapes de documentation et de tests dans DBT. 
 
 En effet, dbt permet de documenter les modèles de données pour :
+
 - améliorer la lisibilité,
 - faciliter la collaboration,
 - garder une trace claire de chaque transformation et de sa logique métier.
 
 Ensuite, dbt inclut des fonctionnalités de test intégrées pour garantir la qualité et la fiabilité des données :
+
 - tests de non-nullité,
 - tests d’unicité,
 - tests de relations entre tables, etc.
@@ -479,33 +513,52 @@ Il y a deux façons d'écrire de la documentation, la première est de rédiger 
 version: 2
 
 models:
-- name: stg_chin__albums     description: "This model contains information about albums"     columns:
-- name: AlbumId         description: "Primary key, unique identifier for each album"         tests:
-- unique
-- not_null
-- name: Title         description: "information about titles of albums"
-- name: ArtistId         description: "Foreign key linking the album to the corresponding artist."
-tests:
-- relationships:               name: artist_id_foreign_key_in_stg_chin_album
-to: ref('stg_chin__artists')               field: ArtistId
-- name: _cleaned_title         description: "Name of the album with the first letter in upper case"
-- name: _nb_char_in_title         description: "Count the number of character in the album title"
+ - name: stg_chin__albums     
+ description: "This model contains information about albums"
+     columns:
+     - name: AlbumId         
+       description: "Primary key, unique identifier for each album"
+         tests:
+         - unique
+         - not_null
+     - name: Title
+       description: "information about titles of albums"
+     - name: ArtistId
+       description: "Foreign key linking the album to the corresponding artist."
+         tests:
+         - relationships:               
+           name: artist_id_foreign_key_in_stg_chin_album
+           to: ref('stg_chin__artists')
+           field: ArtistId
+     - name: _cleaned_title         
+       description: "Name of the album with the first letter in upper case"
+     - name: _nb_char_in_title        
+       description: "Count the number of character in the album title"
 
-- name: stg_chin__artists     description: "This model contains information about artists"     columns:
-- name: ArtistID         description: "Primary key, unique identifier for each artist."
-tests:
-- unique
-- not_null
-- name: Name         description: "information about the name of the artists"
-- name: _cleaned_name         description: "Make sure the name of the artist start with an upper case"
-- name: _nb_char_name         description: "Count the number of character in the name of the artist"
-- name: _snd_name         description: "Convert the name of the artist in sound characters" ```
+     - name: stg_chin__artists     
+       description: "This model contains information about artists"     
+       columns:
+     - name: ArtistID         
+       description: "Primary key, unique identifier for each artist."
+         tests:
+          - unique
+          - not_null
+       - name: Name         
+         description: "information about the name of the artists"
+       - name: _cleaned_name
+         description: "Make sure the name of the artist start with an upper case"
+       - name: _nb_char_name        
+         description: "Count the number of character in the name of the artist"
+       - name: _snd_name        
+         description: "Convert the name of the artist in sound characters"
+ ```
 
 on a la description de deux modèles dans le même fichier. Ce fichier .yml se structure de la manière suivante : 
 
 ```
 - name: nom_du_modele     description: description du modèle     columns: --> Les colonnes du modèle
-- name: nom_de_la_colonne           description: description de la colonne  ```
+- name: nom_de_la_colonne           description: description de la colonne 
+ ```
 
 Une autre manière d'écrire de la documentation est d'écrire des blocs de code markdown qui seront ensuite référencés dans le fichier .yml. 
 Ces blocs markdown sont plus personnalisables (caractère en gras, italique ... puces, etc.) que la propriété "description" des fichiers yaml. 
@@ -521,13 +574,15 @@ Total Amount Spent: The total amount spent by the user.
 Total Tracks: The total quantity of tracks purchased by the user.
 Total Distinct Tracks: The count of distinct tracks purchased by the user.
 Total Orders: The total number of orders placed by the user.
-Dominant State : The state where most tracks are purchased     Number of employee to manage : The number of employee by managers.
+Dominant State : The state where most tracks are purchased    
+Number of employee to manage : The number of employee by managers.
 Average unit price : The average of unit price of tracks sold.
 Total Distinct Customers : The count of distinct customer by tracks.
 Total Support Solicitations : The number of times support is asked.
 In top ten : True/False field to see if the track is in top ten of sales.
 
-{% enddocs %} ```
+{% enddocs %}
+ ```
 
 Un ou plusieurs blocs markdown peuvent être écrits pour être référencé dans un fichier .yml comme int\_chin\_\_employees.yml
 
@@ -535,16 +590,25 @@ Un ou plusieurs blocs markdown peuvent être écrits pour être référencé dan
 version: 2
 
 models:
-- name: int_chin__employees     description: '{{ doc("int_chin__users_invs") }}'     columns:
-- name: CustomerId         description: "Primary key, unique identifier for each track."
-tests:
-- unique
-- not_null
-- name: _cust_full_name         description: "The full name of the customer"
-- name: Country         description: "The country of the manager"
-- name: total_support_solicitations         description: "the total of solicitations of the support"
-- name: _manager_full_name         description: "The full name of the manager"
-- name: nb_employees_to_manage         description: "The number of employees manage by the manager" ```
+  - name: int_chin__employees     
+    description: '{{ doc("int_chin__users_invs") }}'     
+    columns:
+    - name: CustomerId         
+      description: "Primary key, unique identifier for each track."
+          tests:
+          - unique
+          - not_null
+    - name: _cust_full_name         
+      description: "The full name of the customer"
+    - name: Country        
+      description: "The country of the manager"
+    - name: total_support_solicitations        
+      description: "the total of solicitations of the support"
+    - name: _manager_full_name
+      description: "The full name of the manager"
+    - name: nb_employees_to_manage        
+      description: "The number of employees manage by the manager"
+ ```
 
 Au niveau de la propriété "description" du modèle, on trouve une référence à notre bloc markdown. Cette référence peut être réutilisée dans plusieurs fichiers YAML.  
 
@@ -570,31 +634,50 @@ Les tests génériques sont à intégrer dans le fichier yaml contenant la docum
 version: 2
 
 models:
-- name: stg_chin__albums     description: "This model contains information about albums"     columns:
-- name: AlbumId         description: "Primary key, unique identifier for each album"         tests:
-- unique
-- not_null
-- name: Title         description: "information about titles of albums"
-- name: ArtistId         description: "Foreign key linking the album to the corresponding artist."
-tests:
-- relationships:               name: artist_id_foreign_key_in_stg_chin_album
-to: ref('stg_chin__artists')               field: ArtistId
-- name: _cleaned_title         description: "Name of the album with the first letter in upper case"
-- name: _nb_char_in_title         description: "Count the number of character in the album title" ```
+  - name: stg_chin__albums
+    description: "This model contains information about albums"
+     columns:
+     - name: AlbumId         
+     description: "Primary key, unique identifier for each album"         
+        tests:
+        - unique
+        - not_null
+     - name: Title         
+       description: "information about titles of albums"
+     - name: ArtistId        
+       description: "Foreign key linking the album to the corresponding artist."
+        tests:
+        - relationships:               
+        name: artist_id_foreign_key_in_stg_chin_album
+        to: ref('stg_chin__artists')               
+        field: ArtistId
+     - name: _cleaned_title         
+       description: "Name of the album with the first letter in upper case"
+     - name: _nb_char_in_title         
+       description: "Count the number of character in the album title"
+ ```
 
 on trouve l'implémentation d'un test d'unicité et d'un test non-null sur la colonne de clé primaire AlbumId. Sur la colonne de clé secondaire ArtistId, on trouve un test de relation qui va tester l'intégrité référentielle de notre relation. Enfin, dans le modèle stg\_chin\_\_genre, sur la colonne "Name", on trouve le dernier type de test générique qui vérifie si les valeurs de notre colonne sont bien contenues dans la liste spécifiée par le test. 
 
 ```
-- name: stg_chin__genre     description: "This model contains details of products available for sale, primarily focusing on information about the product's volume and size."
-columns:
-- name: GenreId         description: "Primary key, unique identifier for each genre of music."
-tests:
-- unique
-- not_null
-- name: Name         description: "The label of the genre"         tests:
-- accepted_values:               values: ['Rock', 'Science Fiction', 'Drama', 'Alternative & Punk','Pop','Metal','Latin','World',                 'Soundtrack','Sci Fi & Fantasy','Blues','R&B/Soul','Rock And Roll','Electronica/Dance', 'TV Shows','Jazz','Heavy Metal','Opera','Bossa Nova','Classical','Alternative','Reggae','Easy Listening','Hip Hop/Rap','Comedy']
-- name: _cleaned_name         description: "The label of the genre with the first letter in upper case"
-- name: _nb_char_name         description: "The number of characters of the genre" ```
+- name: stg_chin__genre
+  description: "This model contains details of products available for sale, primarily focusing on information about the product's volume and size."
+    columns:
+    - name: GenreId         
+    description: "Primary key, unique identifier for each genre of music."
+        tests:
+        - unique
+        - not_null
+    - name: Name         
+    description: "The label of the genre"         
+        tests:
+        - accepted_values:               
+        values: ['Rock', 'Science Fiction', 'Drama', 'Alternative & Punk','Pop','Metal','Latin','World',                 'Soundtrack','Sci Fi & Fantasy','Blues','R&B/Soul','Rock And Roll','Electronica/Dance', 'TV Shows','Jazz','Heavy Metal','Opera','Bossa Nova','Classical','Alternative','Reggae','Easy Listening','Hip Hop/Rap','Comedy']
+    - name: _cleaned_name         
+    description: "The label of the genre with the first letter in upper case"
+    - name: _nb_char_name         
+    description: "The number of characters of the genre" 
+```
 
 Les tests singuliers
 
@@ -604,7 +687,8 @@ Par exemple, le test quantity\_positive.SQL lance une requête SQL sur le modèl
 
 ```
 select
-InvoiceLineId, from  {{ ref('stg_chin__invoice_lines.sql') }} where Quantity < 0 ```
+InvoiceLineId, from  {{ ref('stg_chin__invoice_lines.sql') }} where Quantity < 0 
+```
 
 # Travailler en collaboration avec Git
 
@@ -682,42 +766,64 @@ Les conflits peuvent être gérés directement dans un IDE comme VSCode ou dans 
 A. Cas pratique : Gérer un conflit lors d'un git merge
 
 Dans un dépôt local : 
+
 1. Création d'une branche ajout-bonjour *git checkout -b ajout-bonjour*.
+
 2. Création d'un fichier "conflict.txt" contenant sur la première ligne "Bonjour et bienvenue dans ce cas pratique".
+
 3. *git add .*, *git commit "mon nouveau fichier bonjour"*, *git push*
 
 Sur Github : 
+
 4. Création et validation de la pull request et fusion de la branche ajout-bonjour à main
 
 Dans le dépôt local : 
+
 5. Création d'une branche add-hello *git checkout -b add-hello*.
+
 6. Création d'un fichier "conflict.txt" contenant sur la première ligne "Hello and welcome to this pratice case".
+
 7. *git add .*, *git commit "my new file hello"*, *git push*
 
 Sur Github : 
+
 10. Résolution du conflit avec l'interface Github en cliquant sur "Resolve conflit" et une fois qu'on a terminé "Commit merge" 
 
 Dans le dépôt local : 
+
 11. *git checkout main*
+
 12. *git pull*
 
 B. Cas pratique : Gérer un conflit lors d'un git rebase
 
 Dans un dépôt local : 
 1. Création d'une branche ajout-bonjour *git checkout -b ajout-aurevoir*.
+
 2. Création d'un fichier "conflict2.txt" contenant sur la première ligne "Merci d'avoir suivi ce cas pratique, au revoir".
+
 3. *git add .*, *git commit "mon nouveau fichier au revoir"*, *git push*
+
 4. Création et validation de la pull request et fusion de la branche ajout-aurevoir à main
+
 5. Création d'une branche add-goodbye *git checkout -b add-goodbye*.
+
 6. Création d'un fichier "conflict2.txt" contenant sur la première ligne "Thanks for following this practice case, bye".
+
 7. *git add .*, *git commit "my new file goodbye"*, *git push*
+
 8. Récupération des modifications récemment fusionnées sur main sur la branche "add-goodbye" *git fetch origin*
+
 9. Application des modifications de "main" sur la branche "add-goodbye" avec *git rebase origin/main*
+
 10. Résolution du conflit avec un éditeur de texte.
+
 11. Ajout des modifications à l'index *git add conflict2.txt*
+
 12. *git rebase continue* et *git push origin add-goobye --force*
 
 Sur github : 
+
 13. Création et validation de la pull request et fusion de la branche ajout-goodbye à main
 
 ## Mettre son code en production
@@ -738,16 +844,22 @@ Enfin, comme pour les branches et commits, le titre de la PR doit être explicit
 Sur Github dans notre dépôt distant : 
 
 1. Se rendre dans l'onglet "Settings"
+
 2. Se rendre dans les options "Branches"
+
 3. Cliquer sur "Add classic branch protection rule"
+
 4. Désigner la branche sur laquelle on souhaite appliquer les règles, en l'occurrence "main"
+
 5. Cocher les règles suivantes : 
+
 - Require a pull request before merging : empêche la modification de la branche main directement
 - Require approval : Nécessite une approbation d'un tiers
 - Require review from code owners
 - Require conversation resolution before merging
 - Lock branch
-5. Cliquer sur "Create"
+
+6. Cliquer sur "Create"
 
 ## Mettre en place une CI/CD
 
@@ -780,7 +892,8 @@ on: [push]
 jobs:   jobname:     runs-on: ubuntu-latest     steps:
 - uses: actions/checkout@v2
 - name: Run a one-line script       run: echo Hello, world!
-- name: Run tests       run: npm test ```
+- name: Run tests       run: npm test 
+```
 
 Dans cet exemple, le workflow est déclenché à chaque push vers le dépôt. Il utilise un container avec la dernière version d'Ubuntu, effectue un checkout du code, exécute une commande simple pour afficher "Hello, world!", et enfin, exécute les tests avec npm. Une fois votre fichier YAML créé et poussé vers votre dépôt, GitHub Actions exécutera automatiquement le workflow selon les événements spécifiés.
 
