@@ -909,25 +909,83 @@ name: CICD DBT
 jobs:   action:
 # Create an Ubuntu container     runs-on: ubuntu-latest
 
-steps:
-- run: echo " The job was automatically triggered by a ${{ github.event_name }} event."
-- run: echo " This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-- run: echo " The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-# Clone the repos
-- name: Checkout repository         uses: actions/checkout@v4
-- run: echo " The ${{ github.repository }} repository has been cloned to the runner."
-- run: echo " The workflow is now ready to test your code on the runner."
-# Run dbt 
-- name: dbt-run         uses: mwhitaker/dbt-action@master         with:
-# Get latest dependancies           dbt_command: "dbt deps"
-# Run dbt on the latest changes with our profile           dbt_command: "dbt run — select +state:modified+ — defer — state manifest_file_folder — fail-fast --profiles-dir ."
-dbt_project_folder: "uv_dag_dbt_bq"         env:
-# BigQuery credentials in secrets of our github project
-DBT_BIGQUERY_TOKEN: ${{ secrets.DBT_BIGQUERY_TOKEN }}
-- name: List files in the repository         run: |
-ls ${{ github.workspace }}
-- run: echo " This job's status is ${{ job.status }}."
+    steps:
+      - run: echo " The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo " This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo " The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      # Clone the repos
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - run: echo " The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo " The workflow is now ready to test your code on the runner."
+      # Run dbt 
+      - name: dbt-run
+        uses: mwhitaker/dbt-action@master
+        with:
+          # Get latest dependancies
+          # Run dbt on the latest changes with our profile
+          dbt_command: "dbt deps && dbt run — select +state:modified+ — defer — state manifest_file_folder — fail-fast --profiles-dir ."
+          dbt_project_folder: "uv_dag_dbt_bq"
+        env:
+          # BigQuery credentials in secrets of our github project
+          DBT_BIGQUERY_TOKEN: ${{ secrets.DBT_BIGQUERY_TOKEN }}
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo " This job's status is ${{ job.status }}."
 ```
+
+# Orchestrer la génération des models dbt
+
+Dagster est un outil d'orchestration, au même titre qu'airflow. A la différence d'airflow, Dagster est mieux intégrer à dbt dans le sens où il propose la notion d'abstraction d'actif. Un actif dans Dagster est un objet dans un stockage persistant. Dans notre cas ce sont nos tables présente dans dbt mais un actif peut être un fichier ou un modèle de machine learning. 
+
+Pour définir un actif, on écrit du code python qui va définir et décrire notre actif. Le fait de définir notre actif permet d'avoir une approche déclarative de la gestion de données puisque tout est écrit dans une fonction. 
+
+La matérialisation est le fait d'executer la fonction python pour sauvegarder son résultat dans un stockage persistant, en l'occurrence BigQuery. 
+
+Pour mettre en place un projet dagster qui enveloppe notre projet dbt il faut lancer la commande suivante : 
+
+`uv run dagster-dbt project scaffold --project-name chinook_dagster --dbt-project-dir uv_dag_dbt_bq`
+
+Avec cette commande on va créer un projet dagster chinook\_dagster qui enveloppera notre projet dbt uv\_dag\_dbt\_bq. 
+
+Il faudra ensuite se rendre dans le dossier chinook\_dagster et lancer la commande : 
+
+`uv dagster dev` 
+
+Si cette commande retourne une erreur, il faudra installer le package python dagster-webserver via la commmande `uv add dagster-webserver`. 
+
+La commande `uv dagester dev` va générer tous les fichiers dont a besoin dagster pour fonctionner. Elle crééra également une interface graphique qui nous permettra d'intérargir avec dagster et notre projet dbt.
+
+Dagster va venir définir nos tables et vues précedemment créer avec dbt en actifs. 
+
+Pour materialiser tous nos models dbt, il suffira de cliquer sur l'icone `materialise all` (=`dbt run`) depuis l'inteface graphique de dagster.
+
+Il sera bien sûr possible de materialiser nos models individuellement et de planifier des materialisations. 
+
+La planification des materialisation se paramêtre dans le fichier *schedule.py* :
+
+```
+
+from dagster_dbt import build_schedule_from_dbt_selection
+
+from .assets import uv_dag_dbt_bq_dbt_assets
+
+schedules = [
+     build_schedule_from_dbt_selection(
+         [uv_dag_dbt_bq_dbt_assets],
+         job_name="materialize_dbt_models",
+         cron_schedule="0 0 * * *",
+         dbt_select="fqn:*",
+     ),
+]
+```
+
+Ici, le paramètre *cron_schedule* stipule un chargement quotidien de tous les models dbt. 
+
+Pour finir, Dagster est un outil d'orchestration très bien intégrer à DBT. En effet, contrairement à airflow qui ne permet que de lancer `dbt run` à intervalles réguliers, Dagster permet de lancer des materialisation individuelles via les tags et empiète également sur les tâche de dbt puisqu'il permet de créer des model dbt avec python. 
+
+
 
 # Conclusion
 
