@@ -361,6 +361,8 @@ c. On sélectionne une méthode de connexion à bigquery. Je vous conseille la m
 - À la seconde étape de création du compte de service, on donnera les rôles "Éditeur de données BigQuery", "Utilisateur de job BigQuery" et "Utilisateur BigQuery".
 - La troisième étape est facultative, on pourra donc cliquer sur "OK".
 
+![image](./images/bigquery_services_management.PNG)
+
 Une fois le compte de service créé, on cliquera sur ce compte de service et on génèrera une clé d'autorisation JSON. Un fichier JSON sera téléchargé. On aura plus qu'à copier/coller le chemin d'accès à ce fichier à l'étape de configuration dbt. 
 
 d. On donne le nombre de coeurs CPU que DBT pourra utiliser.
@@ -395,6 +397,58 @@ Un projet dbt est constitué d'un ensemble de dossiers :
 - tests : Ce dossier contiendra des tests personnalisables sur nos models.
 - analysis : Ce dossier contiendra des requêtes SQL d'analyse supplémentaires.
 - macros : Ce dossier contiendra des fichiers YAML de création de macros jinja. Ce code pourra être utilisé dans les models.
+
+```
+.
+├── analyses
+├── logs
+├── macros
+├── models
+│   ├── intermediate
+│   ├── mart
+│   └── staging
+├── seeds
+├── snapshots
+├── target
+│   ├── compiled
+│   │   └── uv_dag_dbt_bq
+│   │       └── models
+│   │           ├── example
+│   │           │   └── schema.yml
+│   │           ├── intermediate
+│   │           │   ├── int_chin__customers.yml
+│   │           │   ├── int_chin__employees.yml
+│   │           │   └── int_chin__invoices.yml
+│   │           ├── mart
+│   │           ├── source.yml
+│   │           └── staging
+│   │               └── staging_mod_docs.yml
+│   ├── run
+│   │   └── uv_dag_dbt_bq
+│   │       └── models
+│   │           ├── intermediate
+│   │           │   ├── int_chin__customers.yml
+│   │           │   ├── int_chin__employees.yml
+│   │           │   └── int_chin__invoices.yml
+│   │           ├── mart
+│   │           ├── source.yml
+│   │           └── staging
+│   │               └── staging_mod_docs.yml
+│   └── uv_dag_dbt_bq_dbt_assets-97cd896-3f673b0
+│       ├── compiled
+│       │   └── uv_dag_dbt_bq
+│       │       └── models
+│       │           ├── source.yml
+│       │           └── staging
+│       └── run
+│           └── uv_dag_dbt_bq
+│               └── models
+│                   ├── source.yml
+│                   └── staging
+└── tests
+```
+
+![image](./images/dbt_cloud_gui.PNG)
 
 Le fichier dbt\_project.yml est le fichier principal de configuration du projet dbt. Il contient des informations qui détermine comment dbt fonctionne dans notre projet.
 Par exemple des informations sur la matérialisation de nos models en vue ou en table, sur les tests à appliquer...
@@ -956,6 +1010,8 @@ Il faudra ensuite se rendre dans le dossier chinook\_dagster et lancer la comman
 Si cette commande retourne une erreur, il faudra installer le package python dagster-webserver via la commmande `uv add dagster-webserver`. 
 
 La commande `uv dagester dev` va générer tous les fichiers dont a besoin dagster pour fonctionner. Elle crééra également une interface graphique qui nous permettra d'intérargir avec dagster et notre projet dbt.
+
+![image](./images/dagster_gui.PNG)
 
 Dagster va venir définir nos tables et vues précedemment créer avec dbt en actifs. 
 
