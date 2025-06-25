@@ -34,8 +34,8 @@ To install dagster and dbt adapter for bigquery for your project please run this
 
 Please install pandoc and pdflatex
 
-`sudo apt-get install pandoc texlive-latex-base texlive-fonts-recommended texlive-extra-utils texlive-latex-extra`
+`sudo apt-get install pandoc texlive-latex-base texlive-fonts-recommended texlive-extra-utils texlive-latex-extra texlive-xetex`
 
 Generate pdf from markdown file : 
 
-`pandoc  -o docs/analytics_engineer.pdf docs/analytics_engineer.md`
+`pandoc --pdf-engine=xelatex -V "mainfont:DejaVu Sans" -V "monofont:DejaVu Sans Mono" -o docs/analytics_engineer.pdf docs/analytics_engineer.md`
